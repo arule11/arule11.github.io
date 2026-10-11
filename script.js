@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
             './images/montserrat.jpg',
             './images/larches.jpg',
             './images/rimwall.jpg',
+            './images/farm.jpg',
             './images/bird.jpg',
             './images/tent_ridge.jpg', 
             './images/cloud.jpg',
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
             background.style.backgroundImage = `url('${images[i]}')`;
             i = (i + 1) % images.length;
         }
-        setInterval(changeBackgroundImage, 5000); // change image every 5 seconds
+        setInterval(changeBackgroundImage, 4000); // change image every 4 seconds
         changeBackgroundImage();
     }
 });
@@ -38,43 +39,44 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    if (window.location.pathname === '/contact.html'){
+document.addEventListener("DOMContentLoaded", function () {
+    if (window.location.pathname.endsWith("/contact.html")) {
+        emailjs.init("Pt3m20vHZsEDW2ULr");
 
-        (function(){
-            emailjs.init("QFNjbR8RyyiAuG9U3");
-        })();
-        
+        const form = document.getElementById("contact-form");
+        const modal = document.getElementById("popup-modal");
+        const closeButton = document.querySelector(".close-button");
+        const button = form.querySelector('button[type="submit"]');
+
         function validateForm() {
-            let name = document.getElementById("name").value.trim();
-            let email = document.getElementById("email").value.trim();
-            let message = document.getElementById("message").value.trim();
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const message = document.getElementById("message").value.trim();
             let isValid = true;
-        
+
             document.getElementById("name-error").textContent = "";
             document.getElementById("email-error").textContent = "";
             document.getElementById("message-error").textContent = "";
-        
-            if (name === "") {
+
+            if (!name) {
                 document.getElementById("name-error").textContent = "Name is required.";
                 isValid = false;
             }
-            if (email === "") {
+
+            if (!email) {
                 document.getElementById("email-error").textContent = "Email is required.";
                 isValid = false;
-            } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 document.getElementById("email-error").textContent = "Enter a valid email address.";
                 isValid = false;
             }
-            if (message === "") {
+
+            if (!message) {
                 document.getElementById("message-error").textContent = "Message is required.";
                 isValid = false;
             }
             return isValid;
         }
-
-        const modal = document.getElementById('popup-modal');
-        const closeButton = document.querySelector('.close-button');
 
         function showModal() {
             modal.style.display = 'block';
@@ -88,24 +90,30 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-
-        function sendEmail(event) {
+        form.addEventListener("submit", async function (event) {
             event.preventDefault();
-            if (validateForm()) {
-                emailjs.send("service_g6q3ldr", "template_8b3m8wc", {
-                    name: document.getElementById("name").value,
-                    email: document.getElementById("email").value,
-                    message: document.getElementById("message").value,
-                })
-                .then(function(response) {
-                    console.log("Message sent!", response.status, response.text);
-                    document.getElementById("contact-form").reset();
-                    showModal();
-                }, function(error) {
-                    console.log("Failed to send.", error);
+            if (!validateForm()) return;
+
+            button.disabled = true;
+            button.textContent = "Sending...";
+
+            try {
+                await emailjs.send("service_3tyx699", "template_ktks4x5", {
+                    name: document.getElementById("name").value.trim(),
+                    email: document.getElementById("email").value.trim(),
+                    message: document.getElementById("message").value.trim()
                 });
+
+                console.log("Message sent!");
+                form.reset();
+                showModal();
+            } catch (error) {
+                console.error("Failed to send message:", error);
+                alert("Your message could not be sent. Please try again.");
+            } finally {
+                button.disabled = false;
+                button.innerHTML = 'Send Message <i class="fas fa-envelope"></i>';
             }
-        }
-        document.getElementById('contact-form').addEventListener('submit', sendEmail);
+        });
     }
 });

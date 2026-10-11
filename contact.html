@@ -17,23 +17,24 @@
                 <li><a href="education.html">Education</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html" class="active">Contact</a></li>
+                <!-- <li class="right-tab"><a href="portfolio.html">Portfolio</a></li> -->
             </ul>
         </nav>
     </header>
     <main class="other">
         <section id="contact">
             <h2>Contact Me</h2>
-            <form id="contact-form" onsubmit="sendEmail(event)">
+            <form id="contact-form">
                 <label for="name">Your Name:</label>
                 <input type="text" id="name" name="name">
                 <span id="name-error" class="error-message"></span>
 
                 <label for="email">Your Email:</label>
-                <input type="text" id="email" name="email">
+                <input type="text" id="email" name="email" required>
                 <span id="email-error" class="error-message"></span>
 
-                <label for="message">Your Message:</label>
-                <textarea id="message" name="message"></textarea>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
                 <span id="message-error" class="error-message"></span>
 
                 <button type="submit">Send Message <i class="fas fa-envelope"></i></button>
@@ -51,7 +52,7 @@
         </section>
     </main>
     <footer>
-        <p>&copy; 2024 Athena MR</p>
+        <p>&copy; 2026 Athena MR</p>
     </footer>
 </body>
 </html>
