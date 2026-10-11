@@ -12,13 +12,43 @@ document.addEventListener("DOMContentLoaded", function() {
             './images/cloud.jpg',
         ];
         let i = 0;
+        let first = true;
+
+        const bg1 = document.createElement("div");
+        const bg2 = document.createElement("div");
+
+        bg1.className = "background-layer";
+        bg2.className = "background-layer";
+
+        background.appendChild(bg1);
+        background.appendChild(bg2);
+
+        images.forEach((src) => {
+            const img = new Image();
+            img.src = src;
+        });
+
+        bg1.style.backgroundImage = `url('${images[0]}')`;
+        bg1.classList.add("active");
+        i = 1;
 
         function changeBackgroundImage() {
-            background.style.backgroundImage = `url('${images[i]}')`;
-            i = (i + 1) % images.length;
+            const nextLayer = first ? bg2 : bg1;
+            const currentLayer = first ? bg1 : bg2;
+
+            const img = new Image();
+            img.src = images[i];
+
+            img.onload = function () {
+                nextLayer.style.backgroundImage = `url('${images[i]}')`;
+                nextLayer.classList.add("active");
+                currentLayer.classList.remove("active");
+
+                first = !first;
+                i = (i + 1) % images.length;
+            };
         }
-        setInterval(changeBackgroundImage, 4000); // change image every 4 seconds
-        changeBackgroundImage();
+        setInterval(changeBackgroundImage, 4000);
     }
 });
 

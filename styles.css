@@ -349,3 +349,24 @@ footer {
     text-decoration: none;
     cursor: pointer;
 }
+
+#background {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.background-layer {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    z-index: -1;
+}
+
+.background-layer.active {
+    opacity: 1;
+}
